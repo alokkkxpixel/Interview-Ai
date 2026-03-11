@@ -34,9 +34,13 @@ userSchema.statics.hashPassword = function (password) {
   return bcrypt.hash(password, 10);
 };
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign(
+    { _id: this._id.toString(), name: this.username },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "5h",
+    },
+  );
   return token;
 };
 

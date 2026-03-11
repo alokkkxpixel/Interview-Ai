@@ -143,4 +143,32 @@ const logoutUser = async (req, res) => {
     });
   }
 };
-module.exports = { registerUser, loginUser, logoutUser };
+
+// GET user profile route
+// @route /api/auth/profile
+// @access Private
+// @description Get user profile
+const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.userId;
+    // console.log(userId);
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({
+      message: "User profile retrieved successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || "Failed to retrieve user profile",
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, logoutUser, getUserProfile };

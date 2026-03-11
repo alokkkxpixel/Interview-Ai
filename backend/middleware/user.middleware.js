@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
         .json({ message: "Unauthorized: black Invalid or expired token" });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
+    req.userId = decoded;
 
     next();
   } catch (error) {
