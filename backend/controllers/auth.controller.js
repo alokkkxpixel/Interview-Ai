@@ -2,6 +2,7 @@
 // const jwt = require("jsonwebtoken");
 const { z } = require("zod");
 const User = require("../models/User.model.js");
+const BlacklistToken = require("../models/blacklistToken.model.js");
 
 const registerSchema = z.object({
   username: z
@@ -13,6 +14,10 @@ const registerSchema = z.object({
     .min(8, { message: "Password must be at least 8 characters long" }),
 });
 
+// POST register user route
+// @route /api/auth/register
+// @access Public
+// @description Register user with username, email and password
 const registerUser = async (req, res) => {
   try {
     const { username, email, password } = registerSchema.parse(req.body);
@@ -73,6 +78,10 @@ const loginSchema = z
     path: ["username"],
   });
 
+// POST login user route
+// @route /api/auth/login
+// @access Public
+// @description Login user with username or email and password
 const loginUser = async (req, res) => {
   try {
     const { username, email, password } = loginSchema.parse(req.body);
@@ -111,24 +120,26 @@ const loginUser = async (req, res) => {
     res.status(400).json({
       message: err.message || "Login failed",
     });
-    console.log(err, "err");
   }
 };
 
+// GET logout user route
+// @route /api/auth/logout
+// @access Public
+// @description Logout user
 const logoutUser = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    await BlacklistToken.create({ token });
+
+    res.clearCookie("token");
 
     return res.status(200).json({
       message: "Logged out successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Logout failed",
+      message: error.message || "Logout failed",
     });
   }
 };

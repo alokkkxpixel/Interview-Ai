@@ -18,6 +18,6 @@ router.get("/me", authMiddleware, (req, res) => {
   res.send("Hii its user route ");
 });
 
-// POST user logout route
-router.post("/logout", authMiddleware, logoutUser);
+// GET user logout route
+router.get("/logout", logoutUser);
 module.exports = router;
