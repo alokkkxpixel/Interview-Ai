@@ -67,13 +67,12 @@ const registerUser = async (req, res) => {
 
 const loginSchema = z
   .object({
-    username: z.string().min(3).optional(),
-    email: z.string().email().optional(),
+    emailorusername: z.string().min(3).optional(),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters long" }),
   })
-  .refine((data) => data.username || data.email, {
+  .refine((data) => data.emailorusername || data.email, {
     message: "Username or email is required",
     path: ["username"],
   });
@@ -84,9 +83,11 @@ const loginSchema = z
 // @description Login user with username or email and password
 const loginUser = async (req, res) => {
   try {
-    const { username, email, password } = loginSchema.parse(req.body);
+    const { emailorusername, password } = loginSchema.parse(req.body);
 
-    const user = await User.findOne({ $or: [{ email }, { username }] });
+    const user = await User.findOne({
+      $or: [{ email: emailorusername }, { username: emailorusername }],
+    });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
