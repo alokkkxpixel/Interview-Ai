@@ -10,9 +10,25 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { Spinner } from "@/components/ui/spinner"
+import { useState } from "react"
 import { Link, Links } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth"
 
 export function RegisterCard() {
+
+    const [username , setUsername] = useState("")
+    const [email , setEmail] = useState("")
+    const [password , setPassword] = useState("")
+
+    const {handleRegister , loading} = useAuth();
+
+    async function handleRegisterUser(e) {
+      e.preventDefault();
+ 
+      await handleRegister(username, email, password);
+    }
+
   return (
    <Card className="w-full xl:max-w-xl lg:max-w-xl md:max-w-xl sm:w-full border-none shadow-none">
       <CardHeader className="pb-6 pt-10">
@@ -56,6 +72,8 @@ export function RegisterCard() {
             <Label htmlFor="login-email">Username</Label>
             <Input
               id="login-email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               type="text"
               placeholder="john_doe"
               required
@@ -65,6 +83,8 @@ export function RegisterCard() {
             <Label htmlFor="login-email">Email</Label>
             <Input
               id="login-email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="m@example.com"
               required
@@ -75,13 +95,19 @@ export function RegisterCard() {
               <Label htmlFor="login-password">Password</Label>
              
             </div>
-            <Input id="login-password" type="password" required />
+            <Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex-col gap-4 pb-10">
-        <Button type="submit" className="w-full h-12">
-          Register
+        <Button onClick={handleRegisterUser} type="submit" className="w-full h-12">
+            { loading ? (
+                <Spinner />
+            ) : (
+                "Register"
+            )
+
+            }
         </Button>
         <p className="text-muted-foreground text-sm text-center">
           Already have an account?{" "}
