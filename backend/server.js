@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/auth.routes.js");
 const connectToDB = require("./db/db.js");
 const cors = require("cors");
-// const { invokeOpenAI, invokeGemini } = require("./services/ai.service.js");
 const app = express();
 
 app.use(
