@@ -19,6 +19,10 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const response = await loginUser(emailorusername, password);
+<<<<<<< HEAD
+=======
+      console.log(response);
+>>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
       setUser(response.user);
       setLoading(false);
     } catch (error) {
@@ -35,7 +39,11 @@ export const useAuth = () => {
       setLoading(true);
       const response = await registerUser(username, email, password);
       setUser(response.user);
+<<<<<<< HEAD
 
+=======
+      console.log(response);
+>>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -59,10 +67,15 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const response = await getMe();
+<<<<<<< HEAD
       console.log("hooks response", response);
       setUser(response.user);
       setLoading(false);
       return response.user;
+=======
+      setUser(response.user);
+      setLoading(false);
+>>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
     } catch (error) {
       setLoading(false);
       throw error;

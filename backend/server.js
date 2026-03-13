@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/auth.routes.js");
 const connectToDB = require("./db/db.js");
-const cors = require("cors");
+
 const app = express();
 
 app.use(
