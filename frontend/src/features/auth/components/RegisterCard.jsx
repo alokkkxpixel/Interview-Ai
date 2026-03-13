@@ -14,16 +14,10 @@ import { Spinner } from "@/components/ui/spinner"
 import { useState } from "react"
 import { Link, Links } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom"
 
 export function RegisterCard() {
     const navigate = useNavigate();
-=======
-
-export function RegisterCard() {
-
->>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
     const [username , setUsername] = useState("")
     const [email , setEmail] = useState("")
     const [password , setPassword] = useState("")
@@ -34,10 +28,7 @@ export function RegisterCard() {
       e.preventDefault();
  
       await handleRegister(username, email, password);
-<<<<<<< HEAD
       navigate('/home');
-=======
->>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
     }
 
   return (
@@ -110,15 +101,9 @@ export function RegisterCard() {
             <Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
         </div>
-<<<<<<< HEAD
         </CardContent>
         <CardFooter className="flex-col gap-4 pb-10">
           <Button type="submit" className="w-full h-12">
-=======
-      </CardContent>
-      <CardFooter className="flex-col gap-4 pb-10">
-        <Button onClick={handleRegisterUser} type="submit" className="w-full h-12">
->>>>>>> d19fa1a4f86c8f355f750503a66a16aa70e8c2b9
             { loading ? (
                 <Spinner />
             ) : (
