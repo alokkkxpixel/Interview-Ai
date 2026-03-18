@@ -1,19 +1,38 @@
-import HomePage from '@/pages/HomePage'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import { AppLayout } from '@/components/layout/AppLayout'
+import DashboardPage from '@/pages/DashboardPage'
 import { LoginCardPage } from '../features/auth/pages/LoginCardPage'
 import { RegisterCardPage } from '../features/auth/pages/RegisterCardPage'
-import { Route, Routes } from 'react-router-dom'
 import ProtectedWrapper from '../features/auth/components/ProtectedWrapper'
+import NewAnalysis from '@/pages/NewAnalysis'
 
 const AppRouter = () => {
   return (
-    <div>
-       <Routes>
-            <Route path="/home" element={<ProtectedWrapper><HomePage /></ProtectedWrapper>} />
-            {/* <Route path="/about" element={<About />} />  */}
-            <Route path="/auth/login" element={<LoginCardPage />} />
-            <Route path="/auth/register" element={<RegisterCardPage />} />
-        </Routes>
-    </div>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/auth/login" element={<LoginCardPage />} />
+      <Route path="/auth/register" element={<RegisterCardPage />} />
+
+      {/* Protected routes — wrapped in AppLayout (sidebar + header) */}
+      <Route
+        element={
+          <ProtectedWrapper>
+            <AppLayout />
+          </ProtectedWrapper>
+        }
+      >
+        <Route path="/dashboard" element={<DashboardPage />} />
+        {/* Placeholder routes — add pages here as you build them */}
+        <Route path="/analysis/new" element={<NewAnalysis />} />
+        <Route path="/reports" element={<DashboardPage />} />
+        <Route path="/history" element={<DashboardPage />} />
+        <Route path="/skills" element={<DashboardPage />} />
+        <Route path="/settings" element={<DashboardPage />} />
+      </Route>
+
+      {/* Catch-all redirect */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   )
 }
 
