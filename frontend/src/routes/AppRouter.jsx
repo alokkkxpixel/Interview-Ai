@@ -5,6 +5,7 @@ import { LoginCardPage } from '../features/auth/pages/LoginCardPage'
 import { RegisterCardPage } from '../features/auth/pages/RegisterCardPage'
 import ProtectedWrapper from '../features/auth/components/ProtectedWrapper'
 import NewAnalysis from '@/pages/NewAnalysis'
+import ReportDetailPage from '@/features/myReport/pages/ReportDetailPage'
 
 const AppRouter = () => {
   return (
@@ -24,7 +25,7 @@ const AppRouter = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         {/* Placeholder routes — add pages here as you build them */}
         <Route path="/analysis/new" element={<NewAnalysis />} />
-        <Route path="/reports" element={<DashboardPage />} />
+        <Route path="/reports" element={<ReportDetailPage />} />
         <Route path="/history" element={<DashboardPage />} />
         <Route path="/skills" element={<DashboardPage />} />
         <Route path="/settings" element={<DashboardPage />} />

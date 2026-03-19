@@ -1,6 +1,6 @@
-import { StatsCards } from "@/components/dashboard/StatsCards";
-import { CTABanner } from "@/components/dashboard/CTABanner";
-import { RecentReports } from "@/components/dashboard/RecentReports";
+import { StatsCards } from "@/features/dashboard/StatsCards";
+import { CTABanner } from "@/features/dashboard/CTABanner";
+import { RecentReports } from "@/features/dashboard/RecentReports";
 import { Badge } from "@/components/ui/badge";
 
 // TODO: replace with real user from auth context

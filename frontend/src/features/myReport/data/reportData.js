@@ -1,0 +1,66 @@
+export const sampleReport = {
+  id: "1",
+  company: "VERCEL",
+  companyLogo: "V",
+  jobTitle: "Staff Frontend Engineer",
+  location: "Remote",
+  type: "Full-time",
+  matchScore: 84,
+  criticalGaps: ["Next.js 14 App Router", "WebGL/Three.js", "CI/CD Performance", "Edge Functions"],
+  mentorNote: "Vercel emphasizes App Router mastery. Focus Day 1 on Server Components.",
+  sprintDays: [
+    { day: 1, title: "Framework Deep-Dive", description: "Master RSC payload optimization and Suspense boundaries.", completed: false },
+    { day: 2, title: "System Design", description: "Architect a globally distributed frontend cache.", completed: false },
+    { day: 3, title: "Performance Audit", description: "Core Web Vitals deep dive with real metrics.", completed: false },
+    { day: 4, title: "Behavioral Prep", description: "Leadership stories and conflict resolution.", completed: false },
+    { day: 5, title: "Mock Interview", description: "Full 45-minute simulation with AI feedback.", completed: false },
+    { day: 6, title: "Gap Review", description: "Focus on remaining critical gaps.", completed: false },
+    { day: 7, title: "Final Rehearsal", description: "Complete readiness check and confidence building.", completed: false },
+  ],
+  technicalQuestions: [
+    {
+      id: "tq1",
+      category: "CORE REACT ARCHITECTURE",
+      question: "How would you architect a global state solution for a multi-tenant dashboard without sacrificing performance?",
+      interviewerIntent: "The interviewer is testing your understanding of scalability, memoization, and trade-offs between libraries like Redux, Zustand, or native Context API in a complex environment.",
+      howToAnswer: [
+        "Discuss atomic state management vs. monolithic stores.",
+        "Mention data sharding per tenant for security and performance.",
+        "Propose specific memoization strategies for heavy UI components.",
+      ],
+      expanded: true,
+    },
+    {
+      id: "tq2",
+      category: "PERFORMANCE",
+      question: "Explain how you'd optimize Core Web Vitals for a heavy data-viz application.",
+      interviewerIntent: "Tests deep knowledge of browser performance, lazy loading, and rendering optimization.",
+      howToAnswer: [
+        "Start with LCP, CLS, and INP as the three critical metrics.",
+        "Use virtualization for large datasets with react-virtual.",
+        "Implement progressive loading with Suspense boundaries.",
+      ],
+      expanded: false,
+    },
+    {
+      id: "tq3",
+      category: "EDGE & DEPLOYMENT",
+      question: "How would you design a zero-downtime deployment strategy for a Next.js application on Vercel?",
+      expanded: false,
+    },
+  ],
+  behavioralQuestions: [
+    {
+      id: "bq1",
+      category: "LEADERSHIP",
+      question: "Tell me about a time you led a team through a major technical migration.",
+      expanded: false,
+    },
+    {
+      id: "bq2",
+      category: "CONFLICT RESOLUTION",
+      question: "Describe a situation where you disagreed with a product decision. How did you handle it?",
+      expanded: false,
+    },
+  ],
+};

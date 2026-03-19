@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
@@ -35,11 +36,14 @@ const navItems = [
   { label: "Settings", icon: Settings, to: "/settings" },
 ];
 
-export function AppSidebar({ user }) {
+export function AppSidebar() {
   const [dark, setDark] = useState(
     document.documentElement.classList.contains("dark")
   );
   const navigate = useNavigate();
+
+
+  const { user } = useAuth()
 
   function toggleTheme() {
     const isDark = document.documentElement.classList.toggle("dark");
@@ -104,10 +108,10 @@ export function AppSidebar({ user }) {
                         [
                           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                           isActive
-                            ? "bg-indigo-600 text-white shadow-sm"
+                            ? "bg-indigo-600  shadow-sm"
                             : highlight
-                            ? "text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-                            : "text-foreground hover:bg-accent",
+                              ? "text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                              : "text-foreground hover:bg-accent",
                         ].join(" ")
                       }
                     >
