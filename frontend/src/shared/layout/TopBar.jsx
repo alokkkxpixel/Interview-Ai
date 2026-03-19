@@ -16,31 +16,7 @@ export default function TopBar({
   return (
     <header className="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 sticky top-0 z-30">
       {/* Left: Breadcrumb or Search */}
-      <div className="flex-1">
-        {showSearch ? (
-          <div className="relative max-w-lg">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-500"
-            />
-          </div>
-        ) : (
-          breadcrumb && (
-            <nav className="text-xs font-medium text-gray-400 dark:text-gray-500 tracking-widest uppercase">
-              {breadcrumb.map((item, i) => (
-                <span key={i}>
-                  {i > 0 && <span className="mx-2">/</span>}
-                  <span className={cn(i === breadcrumb.length - 1 && "text-gray-500 dark:text-gray-400")}>
-                    {item.label}
-                  </span>
-                </span>
-              ))}
-            </nav>
-          )
-        )}
-      </div>
+      fdfdlfksdfklsdnf fsdflopsdkfmksdmf
 
       {/* Right: Actions + Notifications + User */}
       <div className="flex items-center gap-3">
