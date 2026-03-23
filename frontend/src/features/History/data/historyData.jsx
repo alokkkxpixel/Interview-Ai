@@ -25,7 +25,7 @@ export const historyItems = [
         jobTitle: "Product Designer (UX)",
         company: "Airbnb",
         location: "Hybrid",
-        matchScore: 78,
+        matchScore: 90,
         dateEvaluated: "Oct 21, 2023",
         questions: 8,
         skillGaps: 4,

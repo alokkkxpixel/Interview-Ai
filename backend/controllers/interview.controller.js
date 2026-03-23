@@ -29,6 +29,14 @@ async function generateInterviewReportController(req, res) {
     }
 }
 
+async function getAllInterviewReportsController(req, res) {
+    try {
+        const interviewReports = await InterviewReportModel.find({ userId: req.userId._id });
+        res.status(200).json({ success: true, interviewReports });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
 
-
-module.exports = { generateInterviewReportController }
+module.exports = { generateInterviewReportController, getAllInterviewReportsController }
