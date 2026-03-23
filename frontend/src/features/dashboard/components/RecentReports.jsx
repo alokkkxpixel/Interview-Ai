@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useInterview } from "../hooks/useInterview";
+import { useEffect, useState } from "react";
 
 const mockReports = [
   {
@@ -63,8 +65,19 @@ function ScoreBadge({ score }) {
   );
 }
 
-export function RecentReports({ reports = mockReports }) {
+export function RecentReports() {
   const navigate = useNavigate();
+
+  const { handleGetAllInterviewReports, reports } = useInterview()
+  const data = useInterview()
+
+  async function getAllReports() {
+    await handleGetAllInterviewReports();
+  }
+  useEffect(() => {
+    getAllReports()
+  }, []);
+
 
   return (
     <div className="rounded-xl border border-border bg-background shadow-none overflow-hidden">
@@ -98,17 +111,17 @@ export function RecentReports({ reports = mockReports }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {reports.map((report) => (
+          {reports?.map((report) => (
             <TableRow
-              key={report.id}
+              key={report._id}
               onClick={() => navigate(`/reports/${report.id}`)}
               className="cursor-pointer hover:bg-muted/30 transition-colors"
             >
-              <TableCell className="pl-6 font-medium">{report.jobTitle}</TableCell>
-              <TableCell className="text-muted-foreground">{report.company}</TableCell>
-              <TableCell className="text-muted-foreground">{report.date}</TableCell>
+              <TableCell className="pl-6 font-medium">{report?.jobDescription}</TableCell>
+              <TableCell className="text-muted-foreground">{report?.company}</TableCell>
+              <TableCell className="text-muted-foreground">{report?.createdAt}</TableCell>
               <TableCell>
-                <ScoreBadge score={report.matchScore} />
+                <ScoreBadge score={report?.matchScore} />
               </TableCell>
               <TableCell className="pr-4">
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />

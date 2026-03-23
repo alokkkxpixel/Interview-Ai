@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiAuth = axios.create({
-  baseURL: "http://localhost:3000/api/auth",
+  baseURL: `${import.meta.env.VITE_BACKEND_URI}/api/auth`,
 });
 
 export async function registerUser(username, email, password) {

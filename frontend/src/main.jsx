@@ -5,15 +5,12 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './features/auth/context/AuthContext'
 import { TooltipProvider } from './components/ui/tooltip'
+import ProviderWrapper from './providers/ProviderWrapper'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <TooltipProvider>
-          <App />
-        </TooltipProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <ProviderWrapper>
+      <App />
+    </ProviderWrapper>
   </StrictMode>,
 )
