@@ -85,6 +85,10 @@ const interviewReportSchema = new mongoose.Schema({
     ref: "User",
     required: [true, "Please provide user id"],
   },
+  title: {
+    type: String,
+    required: [true, "Please provide title"],
+  },
   jobDescription: {
     type: String,
     required: [true, "Please provide job description"],
