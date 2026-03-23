@@ -22,7 +22,7 @@ function getGreetingEmoji() {
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col gap-6 max-w-6xl mx-auto w-full">
+    <div className="flex flex-col gap-6 max-w-6xl  mx-auto w-full">
       {/* ── Welcome header ── */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>

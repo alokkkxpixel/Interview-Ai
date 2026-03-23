@@ -69,7 +69,6 @@ export function RecentReports() {
   const navigate = useNavigate();
 
   const { handleGetAllInterviewReports, reports } = useInterview()
-  const data = useInterview()
 
   async function getAllReports() {
     await handleGetAllInterviewReports();
@@ -99,7 +98,7 @@ export function RecentReports() {
               Job Title
             </TableHead>
             <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Company
+              Skills Gaps
             </TableHead>
             <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Date
@@ -114,12 +113,18 @@ export function RecentReports() {
           {reports?.map((report) => (
             <TableRow
               key={report._id}
-              onClick={() => navigate(`/reports/${report.id}`)}
+              onClick={() => navigate(`/reports/${report._id}`)}
               className="cursor-pointer hover:bg-muted/30 transition-colors"
             >
               <TableCell className="pl-6 font-medium">{report?.jobDescription}</TableCell>
-              <TableCell className="text-muted-foreground">{report?.company}</TableCell>
-              <TableCell className="text-muted-foreground">{report?.createdAt}</TableCell>
+              <TableCell className="text-muted-foreground">{Number(report?.skillGaps.length)}</TableCell>
+              <TableCell className="text-muted-foreground">
+                {new Date(report?.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </TableCell>
               <TableCell>
                 <ScoreBadge score={report?.matchScore} />
               </TableCell>

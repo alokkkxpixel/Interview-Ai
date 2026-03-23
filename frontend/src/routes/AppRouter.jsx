@@ -27,7 +27,7 @@ const AppRouter = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         {/* Placeholder routes — add pages here as you build them */}
         <Route path="/analysis/new" element={<NewAnalysisPage />} />
-        <Route path="/reports" element={<ReportDetailPage />} />
+        <Route path="/reports/:id" element={<ReportDetailPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/skills" element={<DashboardPage />} />
         <Route path="/settings" element={<DashboardPage />} />
