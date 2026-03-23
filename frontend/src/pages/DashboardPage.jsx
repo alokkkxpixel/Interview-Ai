@@ -2,6 +2,8 @@ import { StatsCards } from "@/features/dashboard/components/StatsCards";
 import { CTABanner } from "@/features/dashboard/components/CTABanner";
 import { RecentReports } from "@/features/dashboard/components/RecentReports";
 import { Badge } from "@/components/ui/badge";
+import { useInterview } from "@/features/hooks/useInterview";
+import { useEffect } from "react";
 
 // TODO: replace with real user from auth context
 const user = { username: "Alok" };
@@ -21,6 +23,14 @@ function getGreetingEmoji() {
 }
 
 export default function DashboardPage() {
+  const { reports, handleGetAllInterviewReports } = useInterview();
+
+  useEffect(() => {
+    handleGetAllInterviewReports();
+  }, []);
+
+  console.log("Dashboard reports:", reports);
+
   return (
     <div className="flex flex-col gap-6 max-w-6xl  mx-auto w-full">
       {/* ── Welcome header ── */}
@@ -56,7 +66,7 @@ export default function DashboardPage() {
       <CTABanner />
 
       {/* ── Recent Reports ── */}
-      <RecentReports />
+      <RecentReports reports={reports} />
     </div>
   );
 }

@@ -33,7 +33,7 @@ export const useInterview = () => {
             const response = await getAllInterviewReports();
             setReports(response.interviewReports);
 
-            return response;
+            return response.interviewReports;
         } catch (error) {
             throw error;
         } finally {
@@ -45,8 +45,8 @@ export const useInterview = () => {
         try {
             setLoading(true);
             const response = await getInterviewReportById(id);
-            setReports(response.interviewReports);
-            return response;
+            // setReports(response.interviewReports);
+            return response.interviewReport;
         } catch (error) {
             throw error;
         } finally {

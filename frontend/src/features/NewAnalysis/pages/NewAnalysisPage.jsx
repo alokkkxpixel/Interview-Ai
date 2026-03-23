@@ -157,9 +157,15 @@ const NewAnalysisPage = () => {
                   Step 1: Document Upload
                 </h2>
 
-                <span className="text-xs font-semibold tracking-widest px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-500 rounded uppercase">
-                  REQUIRED
-                </span>
+                {fileError ? (
+                  <span className="text-xs font-semibold tracking-widest px-2 py-1 border border-gray-300 dark:border-gray-600 text-red-500 rounded uppercase">
+                    REQUIRED!!
+                  </span>
+                ) : (
+                  <span className="text-xs font-semibold tracking-widest px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-500 rounded uppercase">
+                    REQUIRED
+                  </span>
+                )}
               </div>
 
               <div

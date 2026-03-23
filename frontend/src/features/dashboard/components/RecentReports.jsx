@@ -65,18 +65,10 @@ function ScoreBadge({ score }) {
   );
 }
 
-export function RecentReports() {
+export function RecentReports({ reports }) {
   const navigate = useNavigate();
 
-  const { handleGetAllInterviewReports, reports } = useInterview()
-
-  async function getAllReports() {
-    await handleGetAllInterviewReports();
-  }
-  useEffect(() => {
-    getAllReports()
-  }, []);
-
+  console.log("RecentReport", reports);
 
   return (
     <div className="rounded-xl border border-border bg-background shadow-none overflow-hidden">
@@ -116,8 +108,12 @@ export function RecentReports() {
               onClick={() => navigate(`/reports/${report._id}`)}
               className="cursor-pointer hover:bg-muted/30 transition-colors"
             >
-              <TableCell className="pl-6 font-medium">{report?.jobDescription}</TableCell>
-              <TableCell className="text-muted-foreground">{Number(report?.skillGaps.length)}</TableCell>
+              <TableCell className="pl-6 font-medium">
+                {report?.jobDescription}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {Number(report?.skillGaps.length)}
+              </TableCell>
               <TableCell className="text-muted-foreground">
                 {new Date(report?.createdAt).toLocaleDateString("en-IN", {
                   day: "numeric",

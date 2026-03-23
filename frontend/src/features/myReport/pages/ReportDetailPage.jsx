@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
 import {
   MapPin,
   Briefcase,
@@ -14,109 +14,14 @@ import {
 import TopBar from "@/shared/layout/TopBar";
 import { sampleReport } from "../data/reportData";
 import { cn } from "@/utils/cn";
-
-// Circular Progress SVG
-function CircularProgress({ value }) {
-  const r = 36;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (value / 100) * circ;
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative h-20 w-20 sm:h-28 sm:w-28 transition transition-all duration-500">
-        <svg className="w-full h-full -rotate-90" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r={r} fill="none" stroke="#e5e7eb" strokeWidth="6" />
-          <circle
-            cx="44"
-            cy="44"
-            r={r}
-            fill="none"
-            stroke="#22c55e"
-            strokeWidth="6"
-            strokeDasharray={circ}
-            strokeDashoffset={offset}
-            strokeLinecap="round"
-            transition="all 0.5s ease-in-out"
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-            {value}%
-          </span>
-          <span className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
-            MATCH
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Question card with expand/collapse
-function QuestionCard({ question }) {
-  const [expanded, setExpanded] = useState(question.expanded || false);
-
-  return (
-    <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
-      <button
-        className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3"
-        onClick={() => setExpanded(!expanded)}
-      >
-        <div className="flex-1 min-w-0">
-          <span className="text-xs font-semibold tracking-widest text-gray-400 uppercase block mb-1.5">
-            {question.category}
-          </span>
-          <p className="text-xs sm:text-sm  font-semibold text-gray-900 dark:text-white leading-snug">
-            {question.question}
-          </p>
-        </div>
-        {expanded ? (
-          <ChevronUp className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-gray-400 flex-shrink-0 mt-0.5" />
-        )}
-      </button>
-
-      {expanded && (
-        <div className="px-4 sm:px-5 pb-4 sm:pb-5 border-t border-gray-100 dark:border-gray-800 pt-4 space-y-4">
-          {question.interviewerIntent && (
-            <div>
-              <h4 className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">
-                INTERVIEWER'S INTENT
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                {question.interviewerIntent}
-              </p>
-            </div>
-          )}
-
-          {question.howToAnswer && question.howToAnswer.length > 0 && (
-            <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-lg p-3 sm:p-4">
-              <h4 className="text-xs font-semibold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase mb-3">
-                HOW TO ANSWER
-              </h4>
-              <ul className="space-y-2">
-                {question.howToAnswer.map((point, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
-                  >
-                    <CheckCircle2 className="h-4 w-4 text-indigo-500 flex-shrink-0 mt-0.5" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
+import QuestionCard from "../components/QuestionCard";
+import CircularProgress from "../components/CircularProgress";
+import { useInterview } from "@/features/hooks/useInterview";
 
 // Simple Tabs
 function Tabs({ tabs, activeTab, onChange }) {
   return (
-    <div className="flex gap-0 border-b border-gray-200 dark:border-gray-800 overflow-x-auto no-scrollbar">
+    <div className="flex gap-0 border-b  border-gray-200 dark:border-gray-800 overflow-x-auto no-scrollbar">
       {tabs.map((tab) => (
         <button
           key={tab.value}
@@ -125,7 +30,7 @@ function Tabs({ tabs, activeTab, onChange }) {
             "flex-shrink-0 px-3 sm:px-4 py-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors whitespace-nowrap",
             activeTab === tab.value
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400"
-              : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300",
           )}
         >
           {tab.label}
@@ -137,7 +42,7 @@ function Tabs({ tabs, activeTab, onChange }) {
 
 export default function ReportDetailPage() {
   // const { openSidebar } = useOutletContext();
-  const report = sampleReport;
+
   const [activeTab, setActiveTab] = useState("technical");
 
   const tabList = [
@@ -146,6 +51,35 @@ export default function ReportDetailPage() {
     { value: "gaps", label: "Skill Gaps" },
     { value: "plan", label: "Preparation Plan" },
   ];
+
+  const { id } = useParams();
+  const { handleGetInterviewReportById } = useInterview();
+
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchReport() {
+      try {
+        const data = await handleGetInterviewReportById(id);
+        setReport(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchReport();
+  }, [id]);
+
+  if (loading) {
+    return <div className="p-10 text-center">Loading Report...</div>;
+  }
+
+  if (!report) {
+    return <div className="p-10 text-center">Report Not Found</div>;
+  }
 
   return (
     <>
@@ -156,27 +90,29 @@ export default function ReportDetailPage() {
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                 <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gray-900 dark:bg-gray-800 flex items-center justify-center text-white font-bold text-base sm:text-lg flex-shrink-0">
-                  {report.companyLogo}
+                  {report?.title.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-1">
-                    {report.company}
+                    {report?.company}
                   </div>
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-                    {report.jobTitle}
+                    {report?.title}
                   </h1>
                   <div className="flex flex-wrap items-center gap-3 mt-2">
                     <span className="flex items-center gap-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                      <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {report.location}
+                      <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5" />{" "}
+                      {report?.location}
                     </span>
                     <span className="flex items-center gap-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                      <Briefcase className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {report.type}
+                      <Briefcase className="h-3 w-3 sm:h-3.5 sm:w-3.5" />{" "}
+                      {report?.type}
                     </span>
                   </div>
                 </div>
               </div>
               <div className="flex-shrink-0">
-                <CircularProgress value={75} />
+                <CircularProgress value={report.matchScore} />
               </div>
             </div>
           </div>
@@ -185,7 +121,11 @@ export default function ReportDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Left: Tabs (full width on mobile, 2 cols on lg) */}
             <div className="lg:col-span-2 space-y-4">
-              <Tabs tabs={tabList} activeTab={activeTab} onChange={setActiveTab} />
+              <Tabs
+                tabs={tabList}
+                activeTab={activeTab}
+                onChange={setActiveTab}
+              />
 
               <div className="mt-3 sm:mt-4">
                 {activeTab === "technical" && (
@@ -198,8 +138,13 @@ export default function ReportDetailPage() {
                         TOP PICKS
                       </span>
                     </div>
-                    {report.technicalQuestions.map((q) => (
-                      <QuestionCard key={q.id} question={q} />
+                    {report?.technicalQuestions?.map((q) => (
+                      <QuestionCard
+                        key={q.id}
+                        question={q}
+                        answer={q.answer}
+                        intention={q.interviewerIntent}
+                      />
                     ))}
                   </div>
                 )}
@@ -209,8 +154,13 @@ export default function ReportDetailPage() {
                     <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
                       Behavioral Questions
                     </h2>
-                    {report.behavioralQuestions.map((q) => (
-                      <QuestionCard key={q.id} question={q} />
+                    {report?.behavioralQuestions?.map((q) => (
+                      <QuestionCard
+                        key={q.id}
+                        question={q}
+                        answer={q.answer}
+                        intention={q.interviewerIntent}
+                      />
                     ))}
                   </div>
                 )}
@@ -220,19 +170,45 @@ export default function ReportDetailPage() {
                     <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4">
                       Identified Skill Gaps
                     </h2>
-                    <div className="flex flex-wrap gap-2">
-                      {report.criticalGaps.map((gap) => (
-                        <span
-                          key={gap}
-                          className="px-3 py-1.5 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-medium border border-red-100 dark:border-red-900/30"
-                        >
-                          • {gap}
-                        </span>
-                      ))}
-                    </div>
+
+                    {["high", "medium", "low"].map((level) => {
+                      const skills = report?.skillGaps?.filter(
+                        (gap) => gap.severity === level,
+                      );
+
+                      if (!skills?.length) return null;
+
+                      const levelStyle = {
+                        high: "text-red-600 dark:text-red-400",
+                        medium: "text-amber-600 dark:text-amber-400",
+                        low: "text-green-600 dark:text-green-400",
+                      };
+
+                      return (
+                        <div key={level} className="mb-4">
+                          <span
+                            className={`text-sm font-semibold uppercase tracking-wide ${levelStyle[level]}`}
+                          >
+                            {level}
+                          </span>
+
+                          <span className="text-sm text-gray-600 dark:text-gray-300 ml-2">
+                            —{" "}
+                            {skills.map((skill, i) => (
+                              <span key={i} className="p-2 rounded-full ">
+                                {skill.skill}
+                                {i !== skills.length - 1 && ", "}
+                              </span>
+                            ))}
+                          </span>
+                        </div>
+                      );
+                    })}
+
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 leading-relaxed">
-                      These are the key areas where your profile doesn't fully align
-                      with the job requirements. Focus on these during your 7-day sprint.
+                      These are the key areas where your profile doesn't fully
+                      align with the job requirements. Focus on these during
+                      your 7-day sprint.
                     </p>
                   </div>
                 )}
@@ -242,24 +218,31 @@ export default function ReportDetailPage() {
                     <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4">
                       7-Day Preparation Plan
                     </h2>
-                    <div className="space-y-4">
-                      {report.sprintDays.map((day) => (
+
+                    <div className="space-y-6">
+                      {report?.preparationPlan?.map((day) => (
                         <div key={day.day} className="flex items-start gap-3">
-                          {day.completed ? (
-                            <CheckCircle2 className="h-5 w-5 text-indigo-600 mt-0.5 flex-shrink-0" />
-                          ) : (
-                            <Circle className="h-5 w-5 text-gray-300 dark:text-gray-700 mt-0.5 flex-shrink-0" />
-                          )}
-                          <div>
+                          <Circle className="h-5 w-5 text-gray-300 dark:text-gray-700 mt-1 flex-shrink-0" />
+
+                          <div className="w-full">
                             <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
                               DAY {day.day}
                             </div>
+
+                            {/* focus */}
                             <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {day.title}
+                              {day.focus}
                             </div>
-                            <div className="text-xs text-gray-400 mt-0.5">
-                              {day.description}
-                            </div>
+
+                            {/* tasks */}
+                            <ul className="mt-2 space-y-1 text-xs text-gray-500">
+                              {day.tasks?.map((task, i) => (
+                                <li key={i} className="flex gap-2">
+                                  <span className="text-indigo-500">•</span>
+                                  {task}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         </div>
                       ))}
@@ -277,12 +260,13 @@ export default function ReportDetailPage() {
                   Critical Gaps
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {report.criticalGaps.map((gap) => (
+                  {report.skillGaps.map((gap, index) => (
                     <span
-                      key={gap}
-                      className="px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium"
+                      key={index}
+                      className="p-2 text-xs rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-medium border border-red-100 dark:border-red-900/30"
                     >
-                      • {gap}
+                      {" "}
+                      • {gap.skill}{" "}
                     </span>
                   ))}
                 </div>
@@ -297,7 +281,7 @@ export default function ReportDetailPage() {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {report.mentorNote}
+                  {/* {report?.mentorNote} */}
                 </p>
               </div>
 
@@ -315,7 +299,7 @@ export default function ReportDetailPage() {
                   7-Day Sprint
                 </h3>
                 <div className="space-y-4">
-                  {report.sprintDays.slice(0, 2).map((day) => (
+                  {report?.preparationPlan?.slice(0, 2).map((day) => (
                     <div key={day.day} className="flex items-start gap-3">
                       <div className="flex flex-col items-center">
                         <div
@@ -323,7 +307,7 @@ export default function ReportDetailPage() {
                             "h-4 w-4 rounded-full border-2 flex-shrink-0",
                             day.day === 1
                               ? "bg-indigo-600 border-indigo-600"
-                              : "border-gray-300 dark:border-gray-700"
+                              : "border-gray-300 dark:border-gray-700",
                           )}
                         />
                         {day.day < 2 && (
@@ -363,6 +347,5 @@ export default function ReportDetailPage() {
         </div>
       </div>
     </>
-
   );
 }
