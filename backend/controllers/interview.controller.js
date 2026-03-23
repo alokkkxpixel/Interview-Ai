@@ -39,4 +39,14 @@ async function getAllInterviewReportsController(req, res) {
     }
 }
 
-module.exports = { generateInterviewReportController, getAllInterviewReportsController }
+async function getInterviewReportByIdController(req, res) {
+    try {
+        const interviewReport = await InterviewReportModel.findById(req.params.id);
+        res.status(200).json({ success: true, message: "Interview report fetched by id successfully", interviewReport });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+module.exports = { generateInterviewReportController, getAllInterviewReportsController, getInterviewReportByIdController }
