@@ -2,7 +2,7 @@
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/features/auth/context/AuthContext'
-import { InterviewReportProvider } from '@/features/dashboard/context/InterviewReportContext'
+import { InterviewReportProvider } from '@/features/context/InterviewReportContext'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 

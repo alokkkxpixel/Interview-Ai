@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText, Target, Clock, AlertTriangle } from "lucide-react";
-import { useInterview } from "../hooks/useInterview";
+import { useInterview } from "../../hooks/useInterview";
 import { useMemo } from "react";
 
 export function StatsCards() {

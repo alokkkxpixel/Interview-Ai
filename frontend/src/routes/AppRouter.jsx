@@ -4,9 +4,8 @@ import DashboardPage from '@/pages/DashboardPage'
 import { LoginCardPage } from '../features/auth/pages/LoginCardPage'
 import { RegisterCardPage } from '../features/auth/pages/RegisterCardPage'
 import ProtectedWrapper from '../features/auth/components/ProtectedWrapper'
-import NewAnalysis from '@/pages/NewAnalysis'
 import ReportDetailPage from '@/features/myReport/pages/ReportDetailPage'
-import NewAnalysisPage from '@/features/NewAnalysis/NewAnalysisPage'
+import NewAnalysisPage from '@/features/NewAnalysis/pages/NewAnalysisPage'
 import HistoryPage from '@/features/History/pages/Historypage'
 
 const AppRouter = () => {

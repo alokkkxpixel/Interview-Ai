@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useInterview } from "../hooks/useInterview";
+import { useInterview } from "../../hooks/useInterview";
 import { useEffect, useState } from "react";
 
 const mockReports = [
