@@ -68,13 +68,12 @@ function ScoreBadge({ score }) {
 export function RecentReports({ reports }) {
   const navigate = useNavigate();
 
-  console.log("RecentReport", reports);
-
   return (
-    <div className="rounded-xl border border-border bg-background shadow-none overflow-hidden">
+    <div className="rounded-xl border border-border bg-white dark:bg-zinc-900 shadow-none overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <h2 className="text-sm font-semibold">Recent Reports</h2>
+
         <button
           onClick={() => navigate("/reports")}
           className="text-xs font-semibold text-indigo-600 hover:underline uppercase tracking-wide"
@@ -83,54 +82,85 @@ export function RecentReports({ reports }) {
         </button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-muted/40 hover:bg-muted/40">
-            <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground pl-6">
-              Job Title
-            </TableHead>
-            <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Skills Gaps
-            </TableHead>
-            <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Date
-            </TableHead>
-            <TableHead className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Match Score
-            </TableHead>
-            <TableHead className="w-8" />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {reports?.map((report) => (
-            <TableRow
-              key={report._id}
-              onClick={() => navigate(`/reports/${report._id}`)}
-              className="cursor-pointer hover:bg-muted/30 transition-colors"
-            >
-              <TableCell className="pl-6 font-medium">
-                {report?.jobDescription}
-              </TableCell>
-              <TableCell className="text-muted-foreground">
-                {Number(report?.skillGaps.length)}
-              </TableCell>
-              <TableCell className="text-muted-foreground">
+      {/* MOBILE VIEW */}
+      <div className="md:hidden divide-y">
+        {reports?.map((report) => (
+          <div
+            key={report._id}
+            onClick={() => navigate(`/reports/${report._id}`)}
+            className="flex items-center justify-between px-4 py-4 cursor-pointer"
+          >
+            {/* Left Content */}
+            <div className="min-w-0">
+              <p className="text-sm font-semibold truncate">{report?.title}</p>
+
+              <p className="text-xs text-muted-foreground">
                 {new Date(report?.createdAt).toLocaleDateString("en-IN", {
                   day: "numeric",
                   month: "short",
                   year: "numeric",
                 })}
-              </TableCell>
-              <TableCell>
-                <ScoreBadge score={report?.matchScore} />
-              </TableCell>
-              <TableCell className="pr-4">
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              </TableCell>
+              </p>
+            </div>
+
+            {/* Right */}
+            <div className="flex items-center gap-3">
+              <ScoreBadge score={report?.matchScore} />
+
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* DESKTOP TABLE */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="pl-6 text-xs uppercase">
+                Job Title
+              </TableHead>
+              <TableHead className="text-xs uppercase">Skill Gaps</TableHead>
+              <TableHead className="text-xs uppercase">Date</TableHead>
+              <TableHead className="text-xs uppercase">Match Score</TableHead>
+              <TableHead className="w-8" />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+
+          <TableBody>
+            {reports?.map((report) => (
+              <TableRow
+                key={report._id}
+                onClick={() => navigate(`/reports/${report._id}`)}
+                className="cursor-pointer hover:bg-muted/30"
+              >
+                <TableCell className="pl-6 font-medium">
+                  {report?.title}
+                </TableCell>
+
+                <TableCell>{report?.skillGaps?.length}</TableCell>
+
+                <TableCell>
+                  {new Date(report?.createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </TableCell>
+
+                <TableCell>
+                  <ScoreBadge score={report?.matchScore} />
+                </TableCell>
+
+                <TableCell className="pr-4">
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

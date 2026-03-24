@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const ProtectedWrapper = ({ children }) => {
   const { handleGetMe, setUser, user } = useAuth();
@@ -10,28 +10,26 @@ const ProtectedWrapper = ({ children }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.log("No token found");
         setIsInitializing(false);
-        navigate('/auth/login', { replace: true });
+        navigate("/auth/login", { replace: true });
         return;
       }
 
       // If user is already loaded, skip fetching
       if (user) {
-        console.log("User already loaded");
         setIsInitializing(false);
         return;
       }
 
       try {
         await handleGetMe();
-        console.log("User loaded successfully");
       } catch (error) {
-        localStorage.removeItem('token');
-        navigate('/auth/login', { replace: true });
+        localStorage.removeItem("token");
+        navigate("/auth/login", { replace: true });
       } finally {
         setIsInitializing(false);
       }
@@ -51,11 +49,11 @@ const ProtectedWrapper = ({ children }) => {
   }
 
   // Prevent seeing the layout when explicitly on auth pages
-  if (user && location.pathname.startsWith('/auth/')) {
+  if (user && location.pathname.startsWith("/auth/")) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (!user && !location.pathname.startsWith('/auth/')) {
+  if (!user && !location.pathname.startsWith("/auth/")) {
     return <Navigate to="/auth/login" replace />;
   }
 

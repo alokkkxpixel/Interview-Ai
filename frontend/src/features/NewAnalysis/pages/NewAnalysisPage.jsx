@@ -73,7 +73,6 @@ const NewAnalysisPage = () => {
     setFileError("");
     try {
       const response = await handleGenerateInterviewReport(AnalysisData);
-      console.log(response);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);

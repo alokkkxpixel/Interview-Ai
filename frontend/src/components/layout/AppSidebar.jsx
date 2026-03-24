@@ -24,12 +24,17 @@ import {
   BrainCircuit,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { ModeToggle } from "../mode-toggle";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
-  { label: "New Analysis", icon: PlusCircle, to: "/analysis/new", highlight: true },
+  {
+    label: "New Analysis",
+    icon: PlusCircle,
+    to: "/analysis/new",
+    highlight: true,
+  },
   { label: "My Reports", icon: FileText, to: "/reports" },
   { label: "History", icon: History, to: "/history" },
   { label: "Skill Tracker", icon: BarChart2, to: "/skills" },
@@ -37,18 +42,14 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  const [dark, setDark] = useState(
-    document.documentElement.classList.contains("dark")
-  );
   const navigate = useNavigate();
 
+  const { user } = useAuth();
 
-  const { user } = useAuth()
-
-  function toggleTheme() {
-    const isDark = document.documentElement.classList.toggle("dark");
-    setDark(isDark);
-  }
+  // function toggleTheme() {
+  //   const isDark = document.documentElement.classList.toggle("dark");
+  //   setDark(isDark);
+  // }
 
   function handleLogout() {
     // TODO: wire to auth context logout
@@ -64,7 +65,9 @@ export function AppSidebar() {
             <BrainCircuit className="h-5 w-5 text-white" />
           </div>
           <div className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <span className="font-bold text-base tracking-tight">InterviewAI</span>
+            <span className="font-bold text-base tracking-tight">
+              InterviewAI
+            </span>
             <span className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
               The Efficient Mentor
             </span>
@@ -130,16 +133,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border pb-4 pt-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={dark ? "Light Mode" : "Dark Mode"}
-              onClick={toggleTheme}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-accent cursor-pointer"
-            >
-              {dark ? <Sun className="h-4 w-4 shrink-0" /> : <Moon className="h-4 w-4 shrink-0" />}
-              <span className="group-data-[collapsible=icon]:hidden">
-                {dark ? "Light Mode" : "Dark Mode"}
-              </span>
-            </SidebarMenuButton>
+            <ModeToggle />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -148,7 +142,9 @@ export function AppSidebar() {
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 cursor-pointer"
             >
               <LogOut className="h-4 w-4 shrink-0" />
-              <span className="group-data-[collapsible=icon]:hidden">Logout</span>
+              <span className="group-data-[collapsible=icon]:hidden">
+                Logout
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

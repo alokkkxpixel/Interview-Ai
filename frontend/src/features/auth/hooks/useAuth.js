@@ -58,7 +58,7 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const response = await getMe();
-      console.log("hooks response", response);
+      // console.log("hooks response", response);
       setUser(response.user);
       setLoading(false);
       return response.user;

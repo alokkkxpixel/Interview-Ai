@@ -29,7 +29,7 @@ export default function DashboardPage() {
     handleGetAllInterviewReports();
   }, []);
 
-  console.log("Dashboard reports:", reports);
+  // console.log("Dashboard reports:", reports);
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl  mx-auto w-full">
