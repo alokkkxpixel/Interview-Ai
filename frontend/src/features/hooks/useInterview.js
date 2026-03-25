@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { generateInterviewReport, getAllInterviewReports, getInterviewReportById } from "../services/api.interview";
 import { InterviewReportContext } from "../context/InterviewReportContext";
 
-
 export const useInterview = () => {
+
     const context = useContext(InterviewReportContext);
 
 
@@ -31,8 +31,8 @@ export const useInterview = () => {
         try {
             setLoading(true);
             const response = await getAllInterviewReports();
-            setReports(response.interviewReports);
-
+            
+          console.log(response.interviewReports)
             return response.interviewReports;
         } catch (error) {
             throw error;

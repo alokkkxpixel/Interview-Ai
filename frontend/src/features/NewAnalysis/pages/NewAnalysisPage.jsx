@@ -26,13 +26,13 @@ const NewAnalysisPage = () => {
   const [fileError, setFileError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [selfDescription, setSelfDescription] = useState("");
-  const [targetJobDescription, setTargetJobDescription] = useState("");
+  const [JobDescription, setJobDescription] = useState("");
   const [targetRole, setTargetRole] = useState("");
   const fileInputRef = useRef(null);
 
   const currentStep = !uploadedFile
     ? 1
-    : !selfDescription || !targetJobDescription || !targetRole
+    : !selfDescription || !JobDescription || !targetRole
       ? 2
       : 3;
 
@@ -54,17 +54,18 @@ const NewAnalysisPage = () => {
     }
   };
 
-  const AnalysisData = {
-    selfDescription,
-    targetJobDescription,
-    targetRole,
-    uploadedFile,
-  };
-
   const { handleGenerateInterviewReport, loading } = useInterview();
+
+  const formData = new FormData();
+
+  formData.append("uploadedFile", uploadedFile);
+  formData.append("selfDescription", selfDescription);
+  formData.append("targetRole", targetRole);
+  formData.append("JobDescription", JobDescription);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
     if (!uploadedFile) {
       setFileError("Resume is required. Please upload your resume.");
       return;
@@ -72,8 +73,10 @@ const NewAnalysisPage = () => {
 
     setFileError("");
     try {
-      const response = await handleGenerateInterviewReport(AnalysisData);
-      navigate("/dashboard");
+      const response = await handleGenerateInterviewReport(formData);
+      console.log(response);
+      navigate(`/reports/${response.interviewReport._id}`);
+      toast.success("Report generated successfully");
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +85,11 @@ const NewAnalysisPage = () => {
   const canProceed = () => currentStep === 3;
 
   return (
-    <form className="flex flex-col h-full">
+    <form
+      className="flex flex-col h-full"
+      method="post"
+      encType="multipart/form-data"
+    >
       <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
         {/* Stepper */}
         <div className="max-w-2xl mx-auto mb-8">
@@ -190,9 +197,11 @@ const NewAnalysisPage = () => {
                   ref={fileInputRef}
                   type="file"
                   accept=".pdf,.docx"
+                  name="uploadedFile"
                   className="hidden"
                   onChange={handleFileSelect}
                   aria-required
+                  required
                 />
 
                 {uploadedFile ? (
@@ -291,8 +300,8 @@ const NewAnalysisPage = () => {
                   </label>
 
                   <textarea
-                    value={targetJobDescription}
-                    onChange={(e) => setTargetJobDescription(e.target.value)}
+                    value={JobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
                     rows={6}
                     required
                     aria-required
@@ -353,7 +362,7 @@ const NewAnalysisPage = () => {
                   // variant="outline"
                   type="submit"
                   className="w-full gap-2 bg-indigo-600  transition-all duration-200 text-white hover:bg-indigo-700 hover:text-white border-0"
-                  //   disabled={}
+                  disabled={!canProceed()}
                   onClick={handleSubmit}
                 >
                   <Sparkles className="h-4 w-4" />

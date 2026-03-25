@@ -19,4 +19,8 @@ router.get("/me", authMiddleware, getUserProfile);
 
 // GET user logout route
 router.get("/logout", logoutUser);
+
+
+
+
 module.exports = router;

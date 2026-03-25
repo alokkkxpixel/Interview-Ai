@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/table";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useInterview } from "../../hooks/useInterview";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const mockReports = [
   {
@@ -84,7 +84,7 @@ export function RecentReports({ reports }) {
 
       {/* MOBILE VIEW */}
       <div className="md:hidden divide-y">
-        {reports?.map((report) => (
+        {reports?.slice(0, 3)?.map((report) => (
           <div
             key={report._id}
             onClick={() => navigate(`/reports/${report._id}`)}
@@ -132,7 +132,9 @@ export function RecentReports({ reports }) {
             {reports?.map((report) => (
               <TableRow
                 key={report._id}
-                onClick={() => navigate(`/reports/${report._id}`)}
+                onClick={() => {
+                  navigate(`/reports/${report._id}`);
+                }}
                 className="cursor-pointer hover:bg-muted/30"
               >
                 <TableCell className="pl-6 font-medium">

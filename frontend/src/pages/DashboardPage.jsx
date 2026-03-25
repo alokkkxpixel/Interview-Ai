@@ -3,7 +3,7 @@ import { CTABanner } from "@/features/dashboard/components/CTABanner";
 import { RecentReports } from "@/features/dashboard/components/RecentReports";
 import { Badge } from "@/components/ui/badge";
 import { useInterview } from "@/features/hooks/useInterview";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // TODO: replace with real user from auth context
 const user = { username: "Alok" };
@@ -23,13 +23,24 @@ function getGreetingEmoji() {
 }
 
 export default function DashboardPage() {
-  const { reports, handleGetAllInterviewReports } = useInterview();
+  const { handleGetAllInterviewReports } = useInterview();
 
+  const [reports, setReports] = useState([]);
   useEffect(() => {
-    handleGetAllInterviewReports();
+    async function getReports() {
+      try {
+        const res = await handleGetAllInterviewReports();
+        console.log(res);
+        setReports(res);
+      } catch (error) {
+        toast.error(error.message);
+        console.log(error);
+      }
+    }
+    getReports();
   }, []);
 
-  // console.log("Dashboard reports:", reports);
+  console.log("Dashboard reports:", reports);
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl  mx-auto w-full">

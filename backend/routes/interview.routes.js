@@ -11,7 +11,7 @@ const router = express.Router();
  * @access Private
  */
 
-router.post("/", authMiddleware, upload.single("resume"), generateInterviewReportController)
+router.post("/", authMiddleware, upload.single("uploadedFile"), generateInterviewReportController)
 
 /**
  * @route GET /api/interview/
