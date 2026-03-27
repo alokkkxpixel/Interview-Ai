@@ -28,7 +28,7 @@ export function LoginCard() {
   async function handleLoginUser(e) {
     e.preventDefault();
     await handleLogin(emailorusername, password);
-    navigate("/home");
+    navigate("/dashboard");
   }
   return (
     <Card className="w-full max-w-xl border-none shadow-none flex flex-col  ">

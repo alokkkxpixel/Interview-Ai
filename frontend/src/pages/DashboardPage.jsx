@@ -51,20 +51,6 @@ export default function DashboardPage() {
             Ready to refine your interview presence today?
           </p>
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Badge
-            variant="outline"
-            className="text-xs font-medium border-indigo-200 text-indigo-600 bg-indigo-50 dark:bg-indigo-950 dark:border-indigo-800 dark:text-indigo-400"
-          >
-            3 REPORTS PENDING
-          </Badge>
-          <Badge
-            variant="outline"
-            className="text-xs font-medium border-violet-200 text-violet-600 bg-violet-50 dark:bg-violet-950 dark:border-violet-800 dark:text-violet-400"
-          >
-            NEXT WALK-THRU: 2PM
-          </Badge>
-        </div>
       </div>
 
       {/* ── Stats ── */}

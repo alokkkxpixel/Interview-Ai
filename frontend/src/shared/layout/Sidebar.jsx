@@ -27,7 +27,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-6 py-6">
         <div className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-          InterviewAI
+          Interview Mentor
         </div>
         <div className="text-[10px] font-semibold tracking-[0.15em] text-gray-400 dark:text-gray-500 mt-0.5">
           THE EFFICIENT MENTOR

@@ -7,11 +7,14 @@ import ProtectedWrapper from "../features/auth/components/ProtectedWrapper";
 import ReportDetailPage from "@/features/myReport/pages/ReportDetailPage";
 import NewAnalysisPage from "@/features/NewAnalysis/pages/NewAnalysisPage";
 import HistoryPage from "@/features/History/pages/Historypage";
+import HomePage from "@/pages/HomePage";
 
 const AppRouter = () => {
   return (
     <Routes>
       {/* Public routes */}
+      <Route path="/" element={<HomePage />} />
+
       <Route path="/auth/login" element={<LoginCardPage />} />
       <Route path="/auth/register" element={<RegisterCardPage />} />
 
@@ -29,9 +32,6 @@ const AppRouter = () => {
         <Route path="/reports/:id" element={<ReportDetailPage />} />
         <Route path="/history" element={<HistoryPage />} />
       </Route>
-
-      {/* Catch-all redirect */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };

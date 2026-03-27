@@ -30,13 +30,6 @@ export function AppHeader({ user }) {
 
       {/* Right: search, notifications, avatar */}
       <div className="flex items-center gap-3">
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
-          <Search className="h-4 w-4" />
-        </button>
-        <button className="relative rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
-          <Bell className="h-4 w-4" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-indigo-500" />
-        </button>
         <Avatar className="h-8 w-8 cursor-pointer">
           <AvatarImage src={user?.avatar} />
           <AvatarFallback className="bg-indigo-100 text-indigo-700 text-xs font-semibold">
