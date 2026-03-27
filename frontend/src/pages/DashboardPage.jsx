@@ -71,7 +71,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ── Stats ── */}
-      <StatsCards />
+      <StatsCards reports={reports} />
 
       {/* ── CTA Banner ── */}
       <CTABanner />

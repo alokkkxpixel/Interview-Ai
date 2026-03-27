@@ -1,6 +1,6 @@
 const express = require("express");
 const { authMiddleware } = require("../middleware/user.middleware");
-const { generateInterviewReportController, getAllInterviewReportsController, getInterviewReportByIdController } = require("../controllers/interview.controller");
+const { generateInterviewReportController, getAllInterviewReportsController, getInterviewReportByIdController, generateResumeController } = require("../controllers/interview.controller");
 const upload = require("../middleware/file.middleware");
 const router = express.Router();
 
@@ -27,5 +27,13 @@ router.get("/", authMiddleware, getAllInterviewReportsController)
  * @access Private
  */
 router.get("/:id", authMiddleware, getInterviewReportByIdController)
+
+
+/**
+ * @route POST /api/interview/generate-resume/:interviewReportId
+ * @description Generate resume for the user on the basis of interview report
+ * @access Private
+ */
+router.post("/generate-resume/:interviewReportId",authMiddleware,generateResumeController)
 
 module.exports = router;

@@ -19,6 +19,7 @@ import CircularProgress from "../components/CircularProgress";
 import { useInterview } from "@/features/hooks/useInterview";
 import { Accordion } from "@/components/ui/accordion";
 import QuestionsAccordion from "../components/QuestionCard";
+import toast from "react-hot-toast";
 
 // Simple Tabs
 function Tabs({ tabs, activeTab, onChange }) {
@@ -55,10 +56,14 @@ export default function ReportDetailPage() {
   ];
 
   const { id } = useParams();
-  const { handleGetInterviewReportById } = useInterview();
+  const {
+    handleGetInterviewReportById,
+    handleGenerateResume: generateResumeApi,
+  } = useInterview();
 
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [resumeLoading, setResumeLoading] = useState(false);
 
   useEffect(() => {
     async function fetchReport() {
@@ -82,6 +87,31 @@ export default function ReportDetailPage() {
   if (!report) {
     return <div className="p-10 text-center">Report Not Found</div>;
   }
+
+  const handleGenerateResume = async () => {
+    try {
+      setResumeLoading(true);
+      const data = await generateResumeApi(id);
+
+      const url = window.URL.createObjectURL(
+        new Blob([data], { type: "application/pdf" }),
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `resume_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Resume generated successfully");
+    } catch (err) {
+      toast.error("Failed to generate resume");
+      console.error(err);
+    } finally {
+      setResumeLoading(false);
+    }
+  };
 
   return (
     <>
@@ -110,6 +140,23 @@ export default function ReportDetailPage() {
               </div>
               <div className="flex-shrink-0">
                 <CircularProgress value={report.matchScore} />
+                <button
+                  onClick={handleGenerateResume}
+                  disabled={resumeLoading}
+                  className={cn(
+                    "bg-indigo-600 text-white sm:px-4 sm:py-2 rounded-lg p-2 text-xs mt-5 capitalize tracking-tight flex items-center gap-2",
+                    resumeLoading && "opacity-70 cursor-not-allowed",
+                  )}
+                >
+                  {resumeLoading ? (
+                    <>
+                      <div className="h-3 w-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Generating...
+                    </>
+                  ) : (
+                    "generate ATS resume"
+                  )}
+                </button>
               </div>
             </div>
           </div>

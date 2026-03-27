@@ -42,3 +42,17 @@ export const getInterviewReportById = async (id) => {
     });
     return response.data;
 };
+
+export const generateResume = async (id) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        throw new Error("No token found");
+    }
+    const response = await apiInterview.post(`/generate-resume/${id}`, {}, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob",
+    });
+    return response.data;
+};

@@ -1,11 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText, Target, Clock, AlertTriangle } from "lucide-react";
-import { useInterview } from "../../hooks/useInterview";
 import { useMemo } from "react";
 
-export function StatsCards() {
-  const { reports } = useInterview();
-
+export function StatsCards({ reports }) {
   const stats = useMemo(() => {
     if (!reports || reports.length === 0) {
       return [
@@ -52,19 +49,19 @@ export function StatsCards() {
 
     const avgMatchScore = Math.round(
       reports.reduce((sum, report) => sum + (report.matchScore || 0), 0) /
-      totalReports
+        totalReports,
     );
 
     const avgPrepDays = (
       reports.reduce(
         (sum, report) => sum + (report.preparationPlan?.length || 0),
-        0
+        0,
       ) / totalReports
     ).toFixed(1);
 
     const totalSkillGaps = reports.reduce(
       (sum, report) => sum + (report.skillGaps?.length || 0),
-      0
+      0,
     );
 
     return [
@@ -124,16 +121,12 @@ export function StatsCards() {
                 </span>
               </div>
 
-              <p className="mt-4 text-3xl font-bold tracking-tight">
-                {value}
-              </p>
+              <p className="mt-4 text-3xl font-bold tracking-tight">{value}</p>
 
-              <p className="mt-1  text-sm text-muted-foreground">
-                {label}
-              </p>
+              <p className="mt-1  text-sm text-muted-foreground">{label}</p>
             </CardContent>
           </Card>
-        )
+        ),
       )}
     </div>
   );

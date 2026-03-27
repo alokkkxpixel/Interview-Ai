@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { generateInterviewReport, getAllInterviewReports, getInterviewReportById } from "../services/api.interview";
+import { generateInterviewReport, generateResume, getAllInterviewReports, getInterviewReportById } from "../services/api.interview";
 import { InterviewReportContext } from "../context/InterviewReportContext";
 
 export const useInterview = () => {
@@ -54,6 +54,17 @@ export const useInterview = () => {
         }
     };
 
+    const handleGenerateResume = async (id) => {
+        try {
+            setLoading(true);
+            const response = await generateResume(id);
+            return response;
+        } catch (error) {
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
     return {
         reports,
         loading,
@@ -62,5 +73,6 @@ export const useInterview = () => {
         handleGenerateInterviewReport,
         handleGetAllInterviewReports,
         handleGetInterviewReportById,
+        handleGenerateResume
     };
 }

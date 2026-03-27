@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
-// const puppeteer = require("puppeteer")
+const puppeteer = require("puppeteer")
 
 
 
@@ -63,4 +63,74 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 }
 
-module.exports = { generateInterviewReport }
+async function generatePdfFromHtml(htmlContent) {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" })
+
+    const pdfBuffer = await page.pdf({
+        format: "A4", margin: {
+            top: "10mm",
+            bottom: "10mm",
+            left: "10mm",
+            right: "10mm"
+        }
+    })
+
+    await browser.close()
+
+    return pdfBuffer
+}
+
+async function generateResume({resume,selfDescription,jobDescription}) {
+
+        const ai = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY
+
+    })
+    try {
+         
+            const resumePdfSchema = z.object({
+        html: z.string().describe("The HTML content of the resume which can be converted to PDF using any library like puppeteer")
+    })
+
+    const prompt = `Generate a professional, high-impact resume for a candidate based on the following:
+                        Resume Data: ${resume}
+                        Self Description: ${selfDescription}
+                        Job Description: ${jobDescription}
+
+                        the response should be a JSON object with a single field "html" containing the HTML content.
+                        
+                        CRITICAL REQUIREMENTS:
+                        1. The content MUST fit perfectly on one single A4 page. Use a clean, modern, and compact layout.
+                        2. Use professional typography (sans-serif) and proper hierarchy (headings, bullet points).
+                        3. The HTML should include internal CSS to define the layout. Ensure proper margins (e.g., 10-15mm) and optimized spacing between sections.
+                        4. The content should be highly tailored to the job description, using relevant keywords for ATS optimization.
+                        5. Avoid fluff; focus on quantifiable achievements and relevant skills.
+                        6. Ensure it doesn't sound AI-generated. Use active verbs and professional tone.
+                        7. Design should be elegant with subtle use of color for section headers if necessary.
+                        `
+
+                       const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(resumePdfSchema),
+        }
+    })
+
+    const jsonContent = JSON.parse(response.text)
+    const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
+
+    return pdfBuffer;
+
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+
+    
+}
+
+module.exports = { generateInterviewReport,generateResume }

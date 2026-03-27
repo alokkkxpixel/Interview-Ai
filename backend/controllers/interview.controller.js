@@ -1,5 +1,5 @@
 const pdfparse = require("pdf-parse");
-const { generateInterviewReport } = require("../services/ai.service");
+const { generateInterviewReport,generateResume } = require("../services/ai.service");
 const InterviewReportModel = require("../models/interviewReport.model");
 
 async function generateInterviewReportController(req, res) {
@@ -53,4 +53,31 @@ async function getInterviewReportByIdController(req, res) {
     }
 }
 
-module.exports = { generateInterviewReportController, getAllInterviewReportsController, getInterviewReportByIdController }
+
+async function generateResumeController(req, res) {
+    try {
+        const {interviewReportId} = req.params
+        const interviewReport = await InterviewReportModel.findById(interviewReportId)
+
+    if(!interviewReport){
+        return res.status(404).json({success:false,message:"Interview report not found"})
+    }
+         
+
+    const {resume, JobDescription,selfDescription} = interviewReport
+    
+
+        const resumePdf = await generateResume({ resume: resume, selfDescription: selfDescription, JobDescription: JobDescription });
+        
+        res.set({
+            "Content-Type": "application/pdf",
+            "Content-Disposition": "attachment; filename=resume.pdf"
+        })
+        res.status(201).send(resumePdf);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+module.exports = { generateInterviewReportController, getAllInterviewReportsController, getInterviewReportByIdController,generateResumeController }
