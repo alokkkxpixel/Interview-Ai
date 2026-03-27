@@ -30,7 +30,6 @@ export default function DashboardPage() {
     async function getReports() {
       try {
         const res = await handleGetAllInterviewReports();
-        console.log(res);
         setReports(res);
       } catch (error) {
         toast.error(error.message);
@@ -39,8 +38,6 @@ export default function DashboardPage() {
     }
     getReports();
   }, []);
-
-  console.log("Dashboard reports:", reports);
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl  mx-auto w-full">

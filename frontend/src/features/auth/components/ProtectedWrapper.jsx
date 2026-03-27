@@ -13,7 +13,7 @@ const ProtectedWrapper = ({ children }) => {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        console.log("No token found");
+        console.error("No token found");
         setIsInitializing(false);
         navigate("/auth/login", { replace: true });
         return;

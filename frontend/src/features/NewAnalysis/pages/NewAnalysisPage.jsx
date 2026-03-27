@@ -65,7 +65,6 @@ const NewAnalysisPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     if (!uploadedFile) {
       setFileError("Resume is required. Please upload your resume.");
       return;
@@ -74,11 +73,10 @@ const NewAnalysisPage = () => {
     setFileError("");
     try {
       const response = await handleGenerateInterviewReport(formData);
-      console.log(response);
       navigate(`/reports/${response.interviewReport._id}`);
       toast.success("Report generated successfully");
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to generate report");
     }
   };
 

@@ -7,10 +7,10 @@ async function generateInterviewReportController(req, res) {
         const { selfDescription, JobDescription , targetRole} = req.body;
         const pdfBuffer = req.file.buffer;
         const pdfText = await (new pdfparse.PDFParse(Uint8Array.from(pdfBuffer))).getText();
-        console.log(pdfText.text);
-        console.log("selfDescription",selfDescription);
-        console.log("jobDescription",JobDescription);
-        console.log("targetRole",targetRole);
+        // console.log(pdfText.text);
+        // console.log("selfDescription",selfDescription);
+        // console.log("jobDescription",JobDescription);
+        // console.log("targetRole",targetRole);
         const interviewReportByAi = await generateInterviewReport({ resume: pdfText.text, selfDescription, JobDescription });
         const interviewReport = await InterviewReportModel.create({
             userId: req.userId._id,

@@ -32,7 +32,6 @@ export const useInterview = () => {
             setLoading(true);
             const response = await getAllInterviewReports();
             
-          console.log(response.interviewReports)
             return response.interviewReports;
         } catch (error) {
             throw error;
